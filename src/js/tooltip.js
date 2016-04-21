@@ -18,43 +18,43 @@ let tooltipCount = 0;
 
 class Tooltip {
   constructor(options) {
-    this.options = options;
 
-    if (!this.options.target) {
+    if (!options.target) {
       throw new Error('Tooltip Error: You must provide a target for Tooltip to attach to');
     }
 
-    const position = this.options.target.getAttribute('data-tooltip-position');
+    const position = options.target.getAttribute('data-tooltip-position');
     if (position) {
-      if (typeof this.options.position === 'undefined') {
-        this.options.position = position;
+      if (typeof options.position === 'undefined') {
+        options.position = position;
       }
     }
 
-    const content = this.options.target.getAttribute('data-tooltip');
+    const content = options.target.getAttribute('data-tooltip');
 
     if (content) {
-      if (typeof this.options.content === 'undefined') {
+      if (typeof options.content === 'undefined') {
         const contentEl = document.createElement('div');
         contentEl.innerHTML = content;
 
         // Add ARIA attributes (see #50)
         contentEl.setAttribute('role', 'tooltip');
         contentEl.id = `drop-tooltip-${ tooltipCount }`;
-        this.options.target.setAttribute('aria-describedby', contentEl.id);
+        options.target.setAttribute('aria-describedby', contentEl.id);
         tooltipCount += 1;
 
-        this.options.content = contentEl;
+        options.content = contentEl;
       }
     }
 
-    if (!this.options.content) {
+    if (!options.content) {
       throw new Error('Tooltip Error: You must provide content for Tooltip to display');
     }
 
-    this.options = extend({}, defaults, this.options);
+    options = extend({}, defaults, options);
 
-    this.drop = new _Drop(this.options);
+    this.drop = new _Drop(options);
+    this.options = options;
 
 
   }
